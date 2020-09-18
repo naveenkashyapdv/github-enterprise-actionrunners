@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+ORG=$1
+PAT=$2
+
+
+token=$(curl -s -XPOST \
+    -H "authorization: token ${PAT}" \
+    https://api.github.com/orgs/${ORG}/actions/runners/registration-token | jq -r .token)
+
+./config.sh remove \
+    --url https://github.com/${ORG} \
+    --token ${token}

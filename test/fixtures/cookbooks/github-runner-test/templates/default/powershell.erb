@@ -1,0 +1,8 @@
+$btoken = $args[0]
+$org = $args[1]
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+$headers.Add("Authorization", "Bearer $btoken")
+$body = ""
+$response = Invoke-RestMethod "https://api.github.com/orgs/$org/actions/runners/registration-token" -Method 'POST' -Headers $headers -Body $body
+$response | ConvertTo-Json
