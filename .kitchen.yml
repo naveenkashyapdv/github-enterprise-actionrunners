@@ -17,17 +17,32 @@ verifier:
 
 platforms:
   - name: centos-7
-  - name: ubuntu-16.04
+  # - name: ubuntu-16.04
   - name: windows-2016
     driver:
       box: tas50/windows_2016
 
+      
 suites:
-  - name: default
+  - name: linux
     run_list:
       - recipe[github-runner-test::create_runner]
+     # - recipe[github-runner-test::delete_runner]
+    verifier:
+      inspec_tests:
+        - test/integration/linux
+    attributes:
+    excludes:
+      - windows-2016
+
+  - name: windows
+    run_list:
+     # - recipe[github-runner-test::create_runner]
       - recipe[github-runner-test::delete_runner]
     verifier:
       inspec_tests:
-        - test/integration/default
+        - test/integration/windows
     attributes:
+    excludes:
+      - centos-7
+      - ubuntu-16.04  
