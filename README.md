@@ -38,19 +38,22 @@ There are some limits on GitHub Actions usage when using self-hosted runners. Th
 * Job matrix - A job matrix can generate a maximum of 256 jobs per workflow run. This limit also applies to self-hosted runners.
 
 
-## Platforms
+## Supported operating systems for self-hosted runners
+
+### Platforms
+
+- Ubuntu
+- CentOS, RedHat
+- Windows
 
 The following operating systems are supported for the self-hosted runner application.
 
 * Linux
-   * Red Hat Enterprise Linux 7
-   * CentOS 7
+   * Red Hat Enterprise Linux 7, 8
+   * CentOS 7, 8
    * Ubuntu 16.04 or later
 
 * Windows
-  * Windows 7 64-bit
-  * Windows 8.1 64-bit
-  * Windows 10 64-bit
   * Windows Server 2012 R2 64-bit
   * Windows Server 2016 64-bit
   * Windows Server 2019 64-bit
