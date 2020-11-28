@@ -17,14 +17,14 @@ You can add self-hosted runners at various levels in the management hierarchy:
 
 ## Requirements for self-hosted runner machines
 
-You can use any machine as a self-hosted runner as long at it meets these requirements:
+* You can use any machine as a self-hosted runner as long at it meets these requirements:
 
-You can install and run the self-hosted runner application on the machine. For more information, see ["Supported operating systems for self-hosted runners."](https://docs.github.com/en/free-pro-team@latest/actions/hosting-your-own-runners/about-self-hosted-runners#supported-operating-systems-for-self-hosted-runners)
+* You can install and run the self-hosted runner application on the machine. For more information, see ["Supported operating systems for self-hosted runners."](https://docs.github.com/en/free-pro-team@latest/actions/hosting-your-own-runners/about-self-hosted-runners#supported-operating-systems-for-self-hosted-runners)
 
 
-The machine can communicate with GitHub Actions. For more information, see ["Communication between self-hosted runners and GitHub."](https://docs.github.com/en/free-pro-team@latest/actions/hosting-your-own-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github)
+* The machine can communicate with GitHub Actions. For more information, see ["Communication between self-hosted runners and GitHub."](https://docs.github.com/en/free-pro-team@latest/actions/hosting-your-own-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github)
 
-The machine has enough hardware resources for the type of workflows you plan to run. The self-hosted runner application itself only requires minimal resources.
+* The machine has enough hardware resources for the type of workflows you plan to run. The self-hosted runner application itself only requires minimal resources.
 If you want to run workflows that use Docker container actions or service containers, you must use a Linux machine and Docker must be installed.
 
 
