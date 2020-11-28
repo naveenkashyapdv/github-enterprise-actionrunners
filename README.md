@@ -57,7 +57,7 @@ The following operating systems are supported for the self-hosted runner applica
 
 ### Chef
 
-- Chef 13.0+
+- Chef 15.0+
 
 ## Usage 
  ### Create Runner 
