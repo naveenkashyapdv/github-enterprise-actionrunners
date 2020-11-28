@@ -1,4 +1,4 @@
-# GITHUB Self-Hosted Runners
+# Github Self-Hosted Runners
 
 ## Fully functioning cookbook to install github self-hosted runners for Organization-level 
 
