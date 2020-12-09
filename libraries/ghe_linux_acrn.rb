@@ -20,6 +20,8 @@ class Chef
     property :github_package, kind_of: String, default: 'nil'
     property :service_user, kind_of: String, default: 'nil'
     property :service_group, kind_of: String, default: 'nil'
+    property :root_user, kind_of: String, default: 'root'
+    property :root_group, kind_of: String, default: 'root'
     property :github_org, kind_of: String, default: 'nil'
     property :auth_token, kind_of: String, default: 'nil'
     property :builder_name, kind_of: String, default: 'nil'
@@ -28,8 +30,9 @@ class Chef
     action :create do
       user new_resource.service_user do
         comment 'created by chef'
-        home  "/home/#{new_resource.github_org}"
+        home  "/home/#{new_resource.service_user}"
         shell '/bin/bash'
+        manage_home  true
         action :create
       end
       directory new_resource.install_dir do
@@ -79,7 +82,32 @@ class Chef
         not_if { ::File.exist?("#{new_resource.install_dir}/.credentials") }
         action :run
       end
-    end
+
+      sudo new_resource.service_user do
+        users new_resource.service_user
+        nopasswd true
+        sensitive true
+      end
+
+      execute 'create github as service' do
+        cwd new_resource.install_dir
+        command "sudo ./svc.sh install #{new_resource.service_user}"
+        user new_resource.service_user
+        group new_resource.service_group
+        action :run
+        not_if { ::File.exist?("#{new_resource.install_dir}/.service") }
+      end
+
+      ruby_block 'name' do
+        block do
+        githubservice = IO.read("#{new_resource.install_dir}/.service").strip
+          service "#{githubservice}" do
+            action :start
+          end
+        end
+        action :run
+      end
+  end
 
     ### Delete action runner in Github Enterprise##
     action :delete do
@@ -91,6 +119,16 @@ class Chef
         action :create
         sensitive true
       end
+
+      execute 'remove github service' do
+        cwd new_resource.install_dir
+        command "sudo ./svc.sh uninstall #{new_resource.service_user}"
+        user new_resource.service_user
+        group new_resource.service_group
+        action :run
+        only_if { ::File.exist?("#{new_resource.install_dir}/.service") }
+      end
+
       execute 'delete action runner' do
         cwd new_resource.install_dir.to_s
         command "./remove_runner.sh #{new_resource.github_org} #{new_resource.auth_token}"
