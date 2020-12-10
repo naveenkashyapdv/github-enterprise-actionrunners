@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: github_action_runners
+# Cookbook:: github_action_runners
 # Resource:: ghe_windows_acrn
 # Author:: d.naveenkashyap@gmail.com
 # Copyright:: 2020, The Authors, All Rights Reserved.

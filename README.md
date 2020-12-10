@@ -1,5 +1,7 @@
 # Github Self-Hosted Runners
 
+[![BCH compliance](https://bettercodehub.com/edge/badge/naveenkashyapdv/github-enterprise-actionrunners?branch=master)](https://bettercodehub.com/)  
+
 ## Fully functioning cookbook to install github self-hosted runners for Organization-level 
 
 This cookbook install, manage, and manipulate github hosted runners. Provide authtoken to generate registration-token for github runner
@@ -105,6 +107,7 @@ There are some limits on GitHub Actions usage when using self-hosted runners. Th
     builder_name "#{node['github-runner_windows']['name']}-#{node['hostname']}"
     action :delete
   end
+
   ```
 
 

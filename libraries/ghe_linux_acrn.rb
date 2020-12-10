@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: github_action_runners
+# Cookbook:: github_action_runners
 # Resource:: ghe_linux_acrn
 # Author:: d.naveenkashyap@gmail.com
 # Copyright:: 2020, The Authors, All Rights Reserved.
@@ -28,8 +28,9 @@ class Chef
     action :create do
       user new_resource.service_user do
         comment 'created by chef'
-        home  "/home/#{new_resource.github_org}"
+        home  "/home/#{new_resource.service_user}"
         shell '/bin/bash'
+        manage_home true
         action :create
       end
       directory new_resource.install_dir do
@@ -45,6 +46,7 @@ class Chef
         destination new_resource.install_dir
         strip_components 0
         keep_existing true
+        sensitive true
       end
       template "#{new_resource.install_dir}/github_runner.sh" do
         source new_resource.template_source
@@ -53,9 +55,10 @@ class Chef
         mode '0755'
         sensitive true
         action :create
+        sensitive true
       end
 
-      if node['platform'] == 'redhat' || node['platform'] == 'centos'
+      if platform?('redhat') || platform?('centos')
         %w(
           epel-release
           jq
@@ -79,6 +82,40 @@ class Chef
         not_if { ::File.exist?("#{new_resource.install_dir}/.credentials") }
         action :run
       end
+      sudo new_resource.service_user do
+        users new_resource.service_user
+        nopasswd true
+        sensitive true
+        not_if { ::File.exist?("/etc/sudoers.d/#{new_resource.service_user}") }
+      end
+      bash 'rename service action runner' do
+        cwd new_resource.install_dir
+        code <<-EOH
+        sudo sed -i 's/SVC_NAME="actions.runner.*"/SVC_NAME="actionrunner.service"/g' svc.sh
+        EOH
+        user new_resource.service_user
+        group new_resource.service_group
+        action :run
+        not_if "grep actionrunner.service #{new_resource.install_dir}/svc.sh", environment: { 'name' => 'actionrunner.service' }
+      end
+      execute 'create github as service' do
+        cwd new_resource.install_dir
+        command "sudo ./svc.sh install #{new_resource.service_user}"
+        user new_resource.service_user
+        group new_resource.service_group
+        action :run
+        not_if { ::File.exist?("#{new_resource.install_dir}/.service") }
+        sensitive true
+      end
+      ruby_block 'start github runner as service' do
+        block do
+          githubservice = IO.read("#{new_resource.install_dir}/.service").strip
+          service githubservice.to_s do
+            action :start
+          end
+        end
+        action :run
+      end
     end
 
     ### Delete action runner in Github Enterprise##
@@ -91,6 +128,16 @@ class Chef
         action :create
         sensitive true
       end
+
+      execute 'remove github service' do
+        cwd new_resource.install_dir
+        command "sudo ./svc.sh uninstall #{new_resource.service_user}"
+        user new_resource.service_user
+        group new_resource.service_group
+        action :run
+        only_if { ::File.exist?("#{new_resource.install_dir}/.service") }
+      end
+
       execute 'delete action runner' do
         cwd new_resource.install_dir.to_s
         command "./remove_runner.sh #{new_resource.github_org} #{new_resource.auth_token}"
