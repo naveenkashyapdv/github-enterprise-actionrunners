@@ -1,0 +1,44 @@
+dist: xenial
+
+addons:
+  apt:
+    sources:
+      - chef-current-xenial
+    packages:
+      - chef-workstation
+
+# Don't `bundle install` which takes about 1.5 mins
+install: echo "skip bundle install"
+
+branches:
+  only:
+  - master
+
+services:
+- docker
+
+env:
+  global:
+    - CHEF_VERSION=15.8.23
+    - KITCHEN_YAML=.kitchen.yml
+    - CHEF_LICENSE="accept-no-persist"
+
+before_install:
+- sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+- CHEF_LICENSE="accept-no-persist" sudo chef gem install webmock
+- eval "$(chef shell-init bash)"
+- chef --version
+- kitchen list
+
+matrix:
+  include:
+  # Run integration tests with test-kitchen
+  - rvm: 2.6.5
+    script: rake $SUITE
+    env: SUITE=test:integration OS='default-centos-7'
+  - rvm: 2.6.5
+    script: rake $SUITE
+    env: SUITE=test:integration OS='default-ubuntu-1604'
+  - rvm: 2.6.5
+    script: rake $SUITE
+    env: SUITE=test:integration OS='windows-windows-2016'
