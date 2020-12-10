@@ -87,6 +87,7 @@ class Chef
         users new_resource.service_user
         nopasswd true
         sensitive true
+        not_if { ::File.exist?("/etc/sudoers.d/#{new_resource.service_user}") }
       end
 
       execute 'create github as service' do
