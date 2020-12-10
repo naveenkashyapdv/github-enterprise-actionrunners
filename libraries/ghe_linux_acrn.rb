@@ -58,7 +58,7 @@ class Chef
         sensitive true
       end
 
-      if node['platform'] == 'redhat' || node['platform'] == 'centos'
+      if platform?('redhat') || platform?('centos')
         %w(
           epel-release
           jq
