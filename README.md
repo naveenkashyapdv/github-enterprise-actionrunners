@@ -112,6 +112,7 @@ The following operating systems are supported for the self-hosted runner applica
     builder_name "#{node['github-runner_windows']['name']}-#{node['hostname']}"
     action :delete
   end
+
   ```
 
 

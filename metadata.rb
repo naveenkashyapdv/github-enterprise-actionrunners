@@ -3,9 +3,8 @@ maintainer 'The Authors'
 maintainer_email 'd.naveenkashyap@gmail.com'
 license 'All Rights Reserved'
 description 'Installs/Configures github_action_runners'
-long_description 'Installs/Configures github_action_runners'
-version '0.1.14'
-chef_version '>= 15.0' if respond_to?(:chef_version)
+version '0.1.15'
+chef_version '>= 15.0'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
