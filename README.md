@@ -114,7 +114,7 @@ There are some limits on GitHub Actions usage when using self-hosted runners. Th
 
 # What to expect after instillation 
 
-* Action runner will be installed as service in Linux, and the name of the service would be actionrunners
-* on Windows runner will also be installed as service with service name actions.runner.#{new_resource.github_org}.#{new_resource.builder_name}
+* Action runner will be installed as service in Linux, and the name of the service would be "actionrunners"
+* On Windows runner will also be installed as service with service name "actions.runner.#{new_resource.github_org}.#{new_resource.builder_name}"
 * In Linux the srvice user will have limited permissions to run service commands
 * Windows administrative user will be able to stop and start the service. 
