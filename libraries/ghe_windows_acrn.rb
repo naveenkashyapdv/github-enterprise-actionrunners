@@ -86,7 +86,7 @@ class Chef
         only_if { ::Win32::Service.exists?("actions.runner.#{new_resource.github_org}.#{new_resource.builder_name}") }
       end
       execute 'remove_everthingform_dir' do
-        command "powershell.exe del '#{new_resource.install_dir}\\*' -recurse -force"
+        command "powershell.exe del '#{new_resource.install_dir}' -recurse -force"
         action :run
         only_if { ::Dir.exist?("#{new_resource.install_dir}/_diag") }
         sensitive true
