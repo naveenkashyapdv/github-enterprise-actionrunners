@@ -26,7 +26,7 @@ platforms:
 suites:
   - name: linux
     run_list:
-    # - recipe[github-runner-test::create_runner]
+     - recipe[github-runner-test::create_runner]
      - recipe[github-runner-test::delete_runner]
     verifier:
       inspec_tests:

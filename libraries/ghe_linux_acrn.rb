@@ -86,16 +86,17 @@ class Chef
         users new_resource.service_user
         nopasswd true
         sensitive true
-        not_if { ::File.exist?("/etc/sudoers.d/#{new_resource.service_user}") }
+        commands ['/app/actions-runner/svc.sh*', '/bin/sed*', '/bin/systemctl *st* actionrunner']
       end
       bash 'rename service action runner' do
         cwd new_resource.install_dir
         code <<-EOH
-        sudo sed -i 's/SVC_NAME="actions.runner.*"/SVC_NAME="actionrunner.service"/g' svc.sh
+        sudo /bin/sed -i 's/SVC_NAME="actions.runner.*"/SVC_NAME="actionrunner.service"/g' svc.sh
         EOH
         user new_resource.service_user
         group new_resource.service_group
         action :run
+        sensitive true
         not_if "grep actionrunner.service #{new_resource.install_dir}/svc.sh", environment: { 'name' => 'actionrunner.service' }
       end
       execute 'create github as service' do
